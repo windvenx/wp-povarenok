@@ -1,5 +1,6 @@
 <footer class="site-footer" role="contentinfo" aria-label="Футер сайта">
-    <div class="footer-inner">
+    <div class="container">
+        <div class="footer-inner">
         <div class="footer-col footer-col--logo" aria-hidden="true">
         </div>
 
@@ -325,6 +326,7 @@
                 </div>
             </div>
         </div> 
+    </div>
     </div>
 </footer>
 <?php wp_footer(); ?> 

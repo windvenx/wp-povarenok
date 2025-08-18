@@ -169,16 +169,6 @@
 </g>
 </svg>
                     </div>
-
-                    <div class="branch-select">
-                        <div class="branch-current" title="Текущий филиал">
-                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" aria-hidden>
-                                <path d="M12 2v20M5 9l7 7 7-7" stroke="#333" stroke-width="1.6" stroke-linecap="round"
-                                      stroke-linejoin="round"/>
-                            </svg>
-                            <span>Бишкек</span>
-                        </div>
-                    </div>
                 </div>
 
                 <!-- CENTER: search -->
@@ -202,9 +192,7 @@
                     </div>
 
                     <div class="action-icons">
-                        <button class="icon-btn" title="Избранное">♡</button>
                         <button class="icon-btn" title="Корзина">🛒</button>
-                        <button class="icon-btn" title="Профиль">👤</button>
                     </div>
                 </div>
 

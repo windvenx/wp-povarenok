@@ -42,7 +42,7 @@ button {
     --accent-start: #2fa336;
     --accent-end: #166b1b;
     --container-width: 1300px;
-    --width: 1300px;
+    --width: 1400px;
     --gap: 28px;
     --green: #2f8b39;
     --border: #e9e9e9;
@@ -168,13 +168,12 @@ button {
 }
 
 .search-button {
+    position: relative;
+    right: 50px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     padding: 10px;
-    border-radius: 8px;
-    background: transparent;
-    border: 1px solid rgba(0, 0, 0, 0.06);
 }
 
 /* Right: Contact + Icons */
@@ -387,7 +386,7 @@ button {
    Main Content
    ======================= */
 .layout .container {
-    display: flex;
+    /*display: flex;*/
     flex-direction: row;
     align-items: flex-start;
     min-height: 100vh;
