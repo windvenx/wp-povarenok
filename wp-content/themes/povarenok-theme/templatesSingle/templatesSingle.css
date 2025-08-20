@@ -1,0 +1,973 @@
+/* ========== Стили для product page (без хедера) ========== */
+
+/* базовый reset для фрагмента */
+* {
+    box-sizing: border-box
+}
+
+html, body {
+    height: 100%;
+    margin: 0;
+    font-family: Inter, "Helvetica Neue", Arial, sans-serif;
+    color: #111;
+    background: #fff
+}
+
+/* контейнер (синхронизация с твоим сайтом) */
+.container {
+    max-width: 1300px;
+    margin: 0 auto;
+    padding: 0 18px
+}
+
+/* ===========================
+   header-only styles
+   (оставить в файле, где будет только header)
+   =========================== */
+
+/* Минимальный reset, необходимый для корректной работы хедера */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+ul {
+    list-style: none;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+button {
+    font: inherit;
+    cursor: pointer;
+    border: 0;
+    background: transparent;
+}
+
+/* Переменные, используемые в хедере */
+:root {
+    --white: #ffffff;
+    --black: #222222;
+    --muted: #6b6b6b;
+    --accent-start: #2fa336;
+    --accent-end: #166b1b;
+    --container-width: 1300px;
+    --radius: 6px;
+    --shadow: rgba(0, 0, 0, 0.08);
+}
+
+/* Контейнер (центровка) — используется в header и nav */
+.container {
+    width: var(--container-width);
+    margin: 0 auto;
+    padding: 0 18px;
+}
+
+/* ==========================
+   TOP UTILITY
+   --------------------------
+   Верхняя утилити-панель (Регистрация / Войти)
+   ========================== */
+.top-utility {
+    background: transparent;
+    padding: 8px 0;
+}
+
+.top-utility__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.top-utility .util-link {
+    color: var(--muted);
+    font-size: 13px;
+    margin-left: 10px;
+}
+
+.top-utility .util-delim {
+    color: var(--muted);
+    margin: 0 6px;
+}
+
+/* ==========================
+   HEADER MAIN
+   --------------------------
+   Основная часть хедера (логотип, поиск, контакты)
+   ========================== */
+.header-main { /* wrapper для основной части; можно задавать фон/отступы тут */
+}
+
+/* Колонки хедера */
+.header-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    padding-top: 16px;
+    padding-bottom: 14px;
+}
+
+/* Блоки: left | center | right */
+.header-left,
+.header-center,
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+/* LEFT — логотип + выбор филиала */
+.header-left {
+    min-width: 260px;
+    align-items: center;
+}
+
+.site-logo svg,
+.site-logo img {
+    height: 58px;
+    display: block;
+}
+
+.branch-select {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.branch-label {
+    font-size: 12px;
+    color: var(--muted);
+}
+
+.branch-current {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--black);
+    font-weight: 600;
+    font-size: 16px;
+}
+
+/* CENTER — поиск */
+.header-center {
+    flex: 1 1 520px;
+    justify-content: center;
+}
+
+.search-form {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    max-width: 720px;
+    gap: 8px;
+}
+
+.search-input {
+    flex: 1;
+    border-radius: 8px;
+    padding: 11px 14px;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    color: var(--black);
+    font-size: 15px;
+    background: #f6f8f6;
+}
+
+.search-input::placeholder {
+    color: #9aa19a;
+}
+
+.search-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    border-radius: 8px;
+    background: transparent;
+    border: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+/* RIGHT — телефон + иконки действий */
+.header-right {
+    min-width: 260px;
+    justify-content: flex-end;
+}
+
+.contact-info {
+    text-align: right;
+    margin-right: 12px;
+}
+
+.contact-label {
+    font-size: 12px;
+    color: var(--muted);
+}
+
+.contact-number {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--black);
+}
+
+.action-icons {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.icon-btn {
+    height: 36px;
+    min-width: 36px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    background: #ffffff;
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    color: var(--black);
+    font-size: 14px;
+}
+
+/* ==========================
+   NAV (нижняя зелёная панель)
+   ========================== */
+.header-nav { /* wrapper для nav — если нужен отступ между хедером и панелью */
+}
+
+.site-nav {
+    background: linear-gradient(180deg, var(--accent-start), var(--accent-end));
+    padding: 10px 0;
+    box-shadow: 0 6px 18px var(--shadow);
+}
+
+.nav-list {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.nav-item {
+    flex: 1 1 auto;
+    display: flex;
+    justify-content: center;
+}
+
+.nav-link {
+    color: var(--white);
+    font-weight: 800;
+    font-size: 16px;
+    padding: 12px 10px;
+    text-align: center;
+    width: 100%;
+}
+
+.nav-link--active {
+    background: rgba(0, 0, 0, 0.12);
+    border-radius: 6px;
+}
+
+/* ==========================
+   HEADER: Responsive
+   ========================== */
+@media (max-width: 980px) {
+    .branch-select {
+        display: none;
+    }
+
+    .header-center {
+        order: 3;
+        width: 100%;
+        margin-top: 10px;
+    }
+
+    .header-right .contact-info {
+        display: none;
+    }
+
+    .nav-list {
+        display: none;
+        flex-direction: column;
+        padding: 8px;
+        border-radius: 8px;
+    }
+
+    .nav-open .nav-list {
+        display: flex;
+    }
+}
+
+/* Конец header-only styles */
+
+
+/* ---------- top (breadcrumbs + title) ---------- */
+.product-top {
+    padding: 22px 0 6px
+}
+
+.breadcrumbs {
+    color: #6b6b6b;
+    font-size: 13px;
+    margin-bottom: 6px
+}
+
+.product-title {
+    font-size: 28px;
+    font-weight: 700;
+    margin: 0 0 6px
+}
+
+/* ---------- grid: left + right ---------- */
+.product-grid {
+    display: grid;
+    grid-template-columns:1fr 340px;
+    gap: 34px;
+    align-items: start
+}
+
+/* ---------- gallery ---------- */
+.gallery .main-image {
+    background: #fff;
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    border-radius: 8px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.03);
+}
+
+.gallery .main-image img {
+    max-width: 100%;
+    height: auto;
+    display: block
+}
+
+.thumbs {
+    display: flex;
+    gap: 10px;
+    margin-top: 12px
+}
+
+.thumbs img {
+    width: 82px;
+    height: 62px;
+    object-fit: cover;
+    border-radius: 6px;
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    cursor: pointer
+}
+
+/* ---------- tabs ---------- */
+.product-tabs {
+    display: flex;
+    gap: 10px;
+    margin-top: 16px
+}
+
+.tab {
+    background: #f5f7f5;
+    border: 1px solid rgba(0, 0, 0, 0.04);
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 13px
+}
+
+.tab--active {
+    background: #fff;
+    border-color: #2fa336;
+    box-shadow: 0 1px 0 rgba(0, 0, 0, 0.02)
+}
+
+/* ---------- specs ---------- */
+.specs {
+    margin-top: 16px;
+    background: #fff;
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    padding: 18px;
+    border-radius: 8px
+}
+
+.specs-title {
+    font-size: 16px;
+    margin: 0 0 10px
+}
+
+.spec-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px
+}
+
+.spec-table td {
+    padding: 10px 8px;
+    border-bottom: 1px dashed rgba(0, 0, 0, 0.04)
+}
+
+.spec-table td:first-child {
+    color: #6b6b6b;
+    width: 40%
+}
+
+/* ---------- description ---------- */
+.long-desc {
+    margin-top: 14px;
+    color: #444;
+    line-height: 1.65;
+    font-size: 14px
+}
+
+/* ---------- similar (grid) ---------- */
+.similar {
+    margin-top: 18px
+}
+
+.similar-title {
+    font-size: 16px;
+    margin-bottom: 12px
+}
+
+.similar-grid {
+    display: grid;
+    grid-template-columns:repeat(4, 1fr);
+    gap: 12px
+}
+
+.sim-card {
+    background: #fff;
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    padding: 10px;
+    border-radius: 6px;
+    text-align: center
+}
+
+.sim-card img {
+    width: 100%;
+    height: auto;
+    display: block;
+    margin-bottom: 8px
+}
+
+.sim-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: #222
+}
+
+.sim-price {
+    color: #0b7a0b;
+    font-weight: 700;
+    margin-top: 6px
+}
+
+/* ---------- right column: price card ---------- */
+.price-card {
+    background: #fff;
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    padding: 18px;
+    border-radius: 10px;
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.04)
+}
+
+.price {
+    font-size: 22px;
+    font-weight: 800;
+    color: #111;
+    margin-bottom: 6px
+}
+
+.stock {
+    color: #2fa336;
+    font-weight: 700;
+    margin-bottom: 12px
+}
+
+.qty-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 10px 0
+}
+
+.qty-controls {
+    display: flex;
+    gap: 10px;
+    align-items: center
+}
+
+.qty-controls button {
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    padding: 8px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    height: 40px;
+}
+
+.qty-controls input {
+    width: 56px;
+    padding: 8px;
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    border-radius: 6px;
+    text-align: center
+}
+
+.btn {
+    display: block;
+    padding: 12px 14px;
+    border-radius: 8px;
+    font-weight: 700;
+    border: 0;
+    cursor: pointer
+}
+
+.btn-buy {
+    width: 100%;
+    border: 1px solid #0b7a0b;
+    background: #d32f2f;
+    color: #fff;
+    margin-bottom: 8px
+}
+
+.btn-white {
+    background: #fff;
+    color: #111
+}
+
+/* ---------- recommended list ---------- */
+.recommended {
+    margin-top: 20px
+}
+
+.recommended-title {
+    font-size: 14px;
+    margin-bottom: 10px
+}
+
+.rec-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 0;
+    margin: 0;
+    list-style: none
+}
+
+.rec-list li {
+    display: flex;
+    gap: 10px;
+    align-items: center
+}
+
+.rec-list img {
+    width: 72px;
+    height: 56px;
+    object-fit: cover;
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    border-radius: 6px
+}
+
+.r-info .r-title {
+    font-size: 13px;
+    color: #222
+}
+
+.r-price {
+    font-weight: 700;
+    color: #0b7a0b
+}
+
+/* ---------- responsive ---------- */
+@media (max-width: 1100px) {
+    .product-grid {
+        grid-template-columns:1fr;
+        padding: 0 12px
+    }
+
+    .similar-grid {
+        grid-template-columns:repeat(2, 1fr)
+    }
+
+    .rec-list {
+        flex-direction: row;
+        flex-wrap: wrap
+    }
+}
+
+@media (max-width: 600px) {
+    .product-title {
+        font-size: 20px
+    }
+
+    .thumbs img {
+        width: 56px;
+        height: 44px
+    }
+
+    .similar-grid {
+        grid-template-columns:repeat(2, 1fr)
+    }
+
+    .price-card {
+        padding: 14px
+    }
+}
+
+/* ===========================
+   footer-only styles
+   (вынесено из contact.css)
+   =========================== */
+
+/* Небольшой reset, полезный для футера */
+* {
+    box-sizing: border-box;
+}
+
+/* Переменные, используемые в футере */
+:root {
+    --accent-start: #2fa336;
+    --accent-end: #166b1b;
+    --footer-text: #ffffff;
+    --footer-muted: rgba(255, 255, 255, 0.82);
+    --container: 1300px;
+}
+
+/* Базовый стиль футера */
+.site-footer {
+    padding-top: 20px;
+    background: url("https://zavod-pt.kg/bitrix/templates/aspro_max/images/footer/bg_footer.jpg");
+    background-size: cover;
+    background-position: center;
+    color: var(--footer-text);
+    margin-top: 40px;
+    font-family: Inter, "Helvetica Neue", Arial, sans-serif;
+}
+
+/* Внутренний контейнер: ширина синхронизирована с .container проекта */
+.footer-inner {
+    width: 1300px;
+    display: flex;
+    justify-content: space-between;
+}
+
+/* --- Logo column --- */
+.footer-col--logo {
+    display: flex;
+    align-items: flex-start;
+}
+
+.footer-col--logo svg,
+.footer-col--logo img {
+    width: 180px;
+    height: auto;
+    display: block;
+    filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.45));
+}
+
+/* --- Навигационные колонки --- */
+.col-block {
+    margin-bottom: 8px;
+    max-width: 220px;
+}
+
+.footer-title {
+    color: #fff;
+    font-size: 13px;
+    font-weight: 800;
+    margin-bottom: 10px;
+    letter-spacing: 0.6px;
+}
+
+.footer-list {
+    margin: 0;
+    padding: 0;
+}
+
+.footer-list li {
+    margin-bottom: 8px;
+}
+
+.footer-list a {
+    color: var(--footer-text);
+    opacity: 0.95;
+    font-size: 13px;
+    text-decoration: none;
+    display: block;
+    padding: 4px 0;
+}
+
+/* --- Подписка / Контакты (правая колонка) --- */
+.subscribe-form {
+    display: flex;
+    gap: 8px;
+    margin: 12px 0 18px;
+    align-items: center;
+}
+
+.subscribe-input {
+    flex: 1;
+    padding: 10px 12px;
+    border-radius: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.03);
+    color: var(--footer-text);
+}
+
+.subscribe-input::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.subscribe-btn {
+    padding: 10px 12px;
+    border-radius: 6px;
+    background: rgba(0, 0, 0, 0.18);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Контактные элементы */
+.footer-contacts {
+    margin-top: 6px;
+    color: var(--footer-text);
+    font-size: 13px;
+}
+
+.contact-item {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    margin: 10px 0;
+    color: var(--footer-text);
+}
+
+.contact-item a {
+    color: var(--footer-text);
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.addr .addr-text {
+    color: rgba(255, 255, 255, 0.9);
+    line-height: 1.45;
+    font-size: 13px;
+}
+
+/* Низ футера: полоса с копирайтом и соцсетелями (темный градиент) */
+.footer-bottom {
+    padding: 18px 0;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.06), rgba(0, 0, 0, 0.12));
+}
+
+.footer-bottom__inner {
+    max-width: var(--container);
+    margin: 0 auto;
+    padding: 0 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 13px;
+}
+
+/* Социальные значки (малые квадраты) */
+.badge {
+    display: inline-block;
+    padding: 6px 8px;
+    background: rgba(255, 255, 255, 0.06);
+    color: var(--footer-text);
+    border-radius: 6px;
+    margin-left: 8px;
+    text-decoration: none;
+}
+
+/* Hover states */
+.footer-list a:hover,
+.contact-item a:hover,
+.badge:hover {
+    opacity: 1;
+    transform: translateY(-1px);
+    transition: all .15s ease;
+    color: #fff;
+}
+
+/* ============================
+   Footer: lower legal bar styles
+   (логотип | копирайт | соцсети/печать)
+   ============================ */
+
+.footer-legal {
+    padding: 36px 0 56px;
+    border-top: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+/* внутренняя сетка (логотип | копирайт | правый блок) */
+.footer-legal__inner {
+    display: grid;
+    grid-template-columns: 220px 1fr 220px;
+    gap: 28px;
+    align-items: start;
+    max-width: var(--container);
+    margin: 0 auto;
+    padding: 0 18px;
+}
+
+/* logo inside legal bar */
+.footer-legal__logo {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+}
+
+.footer-legal__logo svg,
+.footer-legal__logo img {
+    display: block;
+    height: 56px;
+    width: auto;
+    filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.45));
+}
+
+/* центр: копирайтные тексты */
+.footer-legal__copy {
+    color: rgba(255, 255, 255, 0.88);
+    font-size: 14px;
+    line-height: 1.6;
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+    padding-top: 6px;
+}
+
+.footer-legal__copy-top {
+    color: rgba(255, 255, 255, 0.95);
+    font-weight: 600;
+    font-size: 10px;
+    line-height: 1.45;
+}
+
+.footer-legal__copy-bottom {
+    color: rgba(255, 255, 255, 0.72);
+    font-size: 10px;
+    line-height: 1.8;
+}
+
+/* правый столбец: соцсети + печать/печать-эмблема */
+.footer-legal__right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 18px;
+    padding-top: 6px;
+}
+
+.footer-legal__socials {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.social-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    background: rgba(255, 255, 255, 0.04);
+    border-radius: 6px;
+    transition: transform .12s ease, background .12s ease;
+    border: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.social-btn img {
+    width: 18px;
+    height: auto;
+    display: block;
+    opacity: 0.95;
+}
+
+.social-btn:hover {
+    transform: translateY(-3px);
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.footer-legal__seal img {
+    width: 64px;
+    height: auto;
+    display: block;
+    opacity: 0.95;
+    filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.5));
+}
+
+/* responsive: упрощённая колонка на планшетах/мобилах */
+@media (max-width: 1100px) {
+    .footer-inner {
+        flex-direction: column;
+        align-items: center;
+        gap: 18px;
+        width: 100%;
+        padding: 24px 18px;
+    }
+
+    .footer-legal__inner {
+        grid-template-columns: 1fr;
+        text-align: center;
+        gap: 18px;
+    }
+
+    .footer-legal__logo {
+        justify-content: center;
+    }
+
+    .footer-legal__copy {
+        align-items: center;
+    }
+
+    .footer-legal__right {
+        align-items: center;
+    }
+
+    .footer-legal__seal img {
+        margin-top: 6px;
+    }
+}
+
+@media (max-width: 480px) {
+    .footer-legal__copy-top {
+        font-size: 12px;
+    }
+
+    .footer-legal__copy-bottom {
+        font-size: 12px;
+    }
+
+    .social-btn {
+        width: 42px;
+        height: 42px;
+    }
+
+    .footer-legal__logo svg, .footer-legal__logo img {
+        height: 48px;
+    }
+}
+
+/* Небольшие поправки позиционирования (если вёрстка требует) */
+.footer-legal__socials {
+    position: relative;
+    right: 130px;
+    top: -50px;
+    width: 143px;
+    height: 143px;
+}
+
+.footer-legal__seal img {
+    position: relative;
+    right: 50px;
+    top: -171px;
+}
+
+/* Конец footer-only styles */
