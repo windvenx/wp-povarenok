@@ -164,7 +164,11 @@ add_action('rest_api_init', function() {
 });
 
 
-
+function enqueue_homepage_styles() {
+    // Подключаем основной style.css
+    wp_enqueue_style('theme-styles', get_stylesheet_uri(), array(), '1.0.0');
+}
+add_action('wp_enqueue_scripts', 'enqueue_homepage_styles');
 
 
 function send_cart_to_telegram(WP_REST_Request $request) {
