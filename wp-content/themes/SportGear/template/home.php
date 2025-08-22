@@ -9,7 +9,7 @@
         <div class="layout">
             <aside class="sidebar sticky-sidebar">
                 <div class="sticky-sidebar__inner">
-                    <div class="sidebar-menu">
+                    <dv class="sidebar-menu">
                         <div class="sidebar-menu__item">
                             <a href="/brands/">
                                 <span class="sidebar-menu__title">Каталог по брендам</span><br>

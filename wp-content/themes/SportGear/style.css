@@ -12,6 +12,7 @@ Version: 1.3
 
 body {
     font-family: 'Mulish', sans-serif;
+    background: white;
 }
 
 @media (min-width: 1300px) {
@@ -43,7 +44,6 @@ button { font: inherit; cursor: pointer; border: 0; background: transparent; }
     --accent-end: #166b1b;
     --container-width: 1300px;
     --radius: 6px;
-    --shadow: rgba(0,0,0,0.08);
 }
 
 /* Контейнер (центровка) — используется в header и nav */
@@ -390,14 +390,6 @@ button { font: inherit; cursor: pointer; border: 0; background: transparent; }
     box-sizing: border-box
 }
 
-body {
-    margin: 0;
-    font-family: var(--font-sans);
-    color: #222;
-    background: #fff;
-    -webkit-font-smoothing: antialiased;
-    line-height: 1.35;
-}
 
 .layout {
     display: flex;
@@ -1092,7 +1084,6 @@ main.main-content {
     width: 100%;
     border-radius: 8px;
     overflow: hidden;
-    background:#000;
   }
   .slides {
     display: flex;
