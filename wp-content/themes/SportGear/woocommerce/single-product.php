@@ -1,160 +1,123 @@
 <?php
-
 /**
- * The Template for displaying all single products
- *
- * This template can be overridden by copying it to yourtheme/woocommerce/single-product.php.
- *
- * @see         https://woocommerce.com/document/template-structure/
- * @package     WooCommerce\Templates
- * @version     1.6.4
+ * Custom Single Product Template
  */
 
-if (!defined('ABSPATH')) {
-    exit; // Exit if accessed directly
-}
+if (!defined('ABSPATH')) exit;
 
 global $product;
 
-// Проверка, что продукт существует
-if (!$product || post_password_required()) {
-    echo get_the_password_form();
-    return;
-}
-
-if (!$product instanceof WC_Product) {
+if (!$product || !$product instanceof WC_Product) {
     $product = wc_get_product(get_the_ID());
 }
 
-$main_image_id = $product->get_image_id(); // Основное изображение
-$gallery_image_ids = $product->get_gallery_image_ids(); // Галерея изображений
-$main_image_url = wp_get_attachment_image_url($main_image_id, 'large'); // URL основного изображения
+$main_image_id   = $product->get_image_id();
+$gallery_ids     = $product->get_gallery_image_ids();
+$main_image_url  = wp_get_attachment_image_url($main_image_id, 'large');
 
 get_header('shop'); ?>
 
-<main class="flex-auto">
-    <div class="container">
-        <div class="flex gap-[50px] mt-[20px] flex-col lg:flex-row  ">
-            <div class="custom-product-gallery">
-                <div class="thumbnails-wrapper">
-                    <?php if (count($gallery_image_ids) > 3) : ?>
-                        <button class="scroll-btn" id="scroll-up">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" style="transform: rotate(-90deg);">
-                                <path fill="currentColor" d="M7.293 1.293a1 1 0 0 0 0 1.414L16.586 12l-9.293 9.293a1 1 0 1 0 1.414 1.414l10-10a1 1 0 0 0 0-1.414l-10-10a1 1 0 0 0-1.414 0"></path>
-                            </svg>
-                        </button>
-                    <?php endif; ?>
-                    <div class="thumbnails">
-                        <img src="<?php echo esc_url($main_image_url); ?>" data-large="<?php echo esc_url($main_image_url); ?>" class="thumbnail" alt="<?php echo esc_attr($product->get_name()); ?>">
-                        <?php foreach ($gallery_image_ids as $image_id): ?>
-                            <img src="<?php echo esc_url(wp_get_attachment_image_url($image_id, 'thumbnail')); ?>" data-large="<?php echo esc_url(wp_get_attachment_image_url($image_id, 'large')); ?>" class="thumbnail" alt="<?php echo esc_attr($product->get_name()); ?>">
-                        <?php endforeach; ?>
-                    </div>
-                    <?php if (count($gallery_image_ids) > 3) : ?>
-                        <button class="scroll-btn" id="scroll-down">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" style="transform: rotate(90deg);">
-                                <path fill="currentColor" d="M7.293 1.293a1 1 0 0 0 0 1.414L16.586 12l-9.293 9.293a1 1 0 1 0 1.414 1.414l10-10a1 1 0 0 0 0-1.414l-10-10a1 1 0 0 0-1.414 0"></path>
-                            </svg>
-                        </button>
-                    <?php endif; ?>
-                </div>
-                <div class="main-image">
-                    <img id="main-image" src="<?php echo esc_url($main_image_url); ?>" alt="<?php echo esc_attr($product->get_name()); ?>">
-                </div>
-            </div>
+<div class="container">
+    <main class="product-container">
 
-            <div class="product-info">
-                <?php
-                // Получение категорий текущего товара
-                $terms = get_the_terms(get_the_ID(), 'product_cat');
-                if ($terms && !is_wp_error($terms)) {
-                    echo '<a href="' . esc_url(get_term_link($terms[0])) . '">' . esc_html($terms[0]->name) . '</a>';
-                }
-                ?>
-                <h2><?php echo esc_html(the_title()); ?></h2>
-                <?php render_price($product->get_id(), $product->is_on_backorder(1)); ?>
-                <div class="short-description"><?php echo wp_kses_post($product->get_short_description()); ?></div>
-
-
-                <div class="wp-block-button wc-block-grid__product-add-to-cart mt-[20px]">
-                    <?php if ($product->is_in_stock()) : ?>
-                        <a href="?add-to-cart=<?php echo get_the_ID() ?>"
-                            aria-label="Добавить в корзину “<?php echo the_title() ?>”"
-                            data-quantity="1"
-                            data-product_id="<?php echo get_the_ID() ?>"
-                            data-price="<?php esc_attr($product->get_regular_price()) ?>"
-                            rel="nofollow"
-                            class="wp-block-button__link  add_to_cart_button ajax_add_to_cart">В корзину</a>
-                    <?php else: ?>
-                        <button
-                            class="wp-block-button__link  add_to_cart_button ajax_add_to_cart" disabled="disabled">Нет в наличии</button>
-                    <?php endif; ?>
-                </div>
-            </div>
-        </div>
-
-        <div class="product-tabs mb-[20px]">
-            <ul class="tab-links">
-                <li class="active"><a href="#description">Описание</a></li>
-                <?php
-                if ($product->get_attributes()) {
-                ?>
-                    <li><a href="#additional-info">Доп. информация</a></li>
-                <?php
-                }
-                ?>
-            </ul>
-            <div class="tab-content" id="tab-content">
-                <div id="description" class="tab active"><?php echo wp_kses_post($product->get_description()); ?></div>
-                <?php
-                if (count($product->get_attributes()) > 0) {
-                ?>
-                    <div id="additional-info" class="tab">
-                        <table class="product-attributes-table">
-                            <thead>
-                                <tr>
-                                    <th>Характеристика</th>
-                                    <th>Описание</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php foreach ($product->get_attributes() as $attribute): ?>
-                                    <tr>
-                                        <td><?php echo esc_html(wc_attribute_label($attribute->get_name())); ?></td>
-                                        <td>
-                                        <?php 
-                                        if ($attribute->is_taxonomy()){
-                                            echo  esc_html(implode(', ', wc_get_product_terms($product->get_id(), $attribute->get_name(), array('fields' => 'names'))));
-                                        }
-                                        else{
-                                            echo esc_html(implode(', ', $attribute->get_options()));
-                                        }
-                                        ?>
-                                        </td>
-                                    </tr>
-                                <?php endforeach; ?>
-                            </tbody>
-                        </table>
-                    </div>
-
-                <?php
-                }
-                ?>
-            </div>
-        </div>
+  <!-- breadcrumbs + title -->
+  <div>
+    <?php woocommerce_breadcrumb(); ?>
+    <h1 class="product-title"><?php the_title(); ?></h1>
+    <div class="meta-row" style="color:#6b6b6b;font-size:13px;margin-top:6px">
+      Код товара: <?php echo esc_html($product->get_sku()); ?>
     </div>
+  </div>
+
+  <div class="layout" style="margin-top:18px;">
+
+    <!-- LEFT -->
+    <div class="left-col">
+      <div class="product-card">
+
+        <div class="gallery">
+          <div class="main-image-box">
+            <img id="mainImg" class="main-image" 
+                 src="<?php echo esc_url($main_image_url); ?>" 
+                 alt="<?php the_title_attribute(); ?>">
+          </div>
+
+          <!-- thumbnails -->
+          <?php if ($gallery_ids): ?>
+          <div class="thumbs">
+            <?php foreach ($gallery_ids as $img_id): ?>
+              <img class="thumb"
+                   data-src="<?php echo esc_url(wp_get_attachment_url($img_id)); ?>"
+                   src="<?php echo esc_url(wp_get_attachment_image_url($img_id, 'thumbnail')); ?>"
+                   alt="<?php the_title_attribute(); ?>">
+            <?php endforeach; ?>
+          </div>
+          <?php endif; ?>
+
+          <!-- Tabs -->
+          <div class="tabs" role="tablist" aria-label="Product tabs">
+            <button class="tab active" data-tab="desc">Описание</button>
+            <?php if ($product->get_attributes()) : ?>
+              <button class="tab" data-tab="specs">Характеристики</button>
+            <?php endif; ?>
+          </div>
+
+          <!-- tab contents -->
+          <div id="tab-desc" class="tab-content" style="margin-top:14px">
+            <div class="specs-card">
+              <h3>Описание</h3>
+              <p class="desc-text"><?php echo wp_kses_post($product->get_description()); ?></p>
+            </div>
+          </div>
+
+          <?php if ($product->get_attributes()) : ?>
+          <div id="tab-specs" class="tab-content" style="display:none;margin-top:14px">
+            <div class="specs-card">
+              <h3>Характеристики</h3>
+              <table class="specs-table">
+                <tbody>
+                <?php foreach ($product->get_attributes() as $attr): ?>
+                  <tr>
+                    <td><?php echo esc_html(wc_attribute_label($attr->get_name())); ?></td>
+                    <td>
+                      <?php
+                      if ($attr->is_taxonomy()) {
+                          echo esc_html(implode(', ', wc_get_product_terms($product->get_id(), $attr->get_name(), ['fields'=>'names'])));
+                      } else {
+                          echo esc_html(implode(', ', $attr->get_options()));
+                      }
+                      ?>
+                    </td>
+                  </tr>
+                <?php endforeach; ?>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <?php endif; ?>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT -->
+    <aside class="right-col">
+      <div class="buy-box">
+        <div class="price-row">
+          <div class="price-big">
+            <?php echo $product->get_price_html(); ?>
+          </div>
+        </div>
+
+        <!-- Add to cart -->
+        <div class="actions">
+          <?php woocommerce_template_single_add_to_cart(); ?>
+        </div>
+      </div>
+    </aside>
+
+  </div>
 </main>
-
-
-
-
-
-
-
-
-
-
-
-
+</div>
 
 <?php get_footer('shop'); ?>

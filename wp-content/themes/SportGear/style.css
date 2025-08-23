@@ -42,15 +42,11 @@ button { font: inherit; cursor: pointer; border: 0; background: transparent; }
     --muted: #6b6b6b;
     --accent-start: #2fa336;
     --accent-end: #166b1b;
-    --container-width: 1300px;
+    --container-width: 1700px;
     --radius: 6px;
 }
 
-/* Контейнер (центровка) — используется в header и nav */
-.container {
-    width: var(--container-width);
-    margin: 0 auto;
-}
+
 
 /* ==========================
    TOP UTILITY
@@ -220,8 +216,7 @@ button { font: inherit; cursor: pointer; border: 0; background: transparent; }
 
 .layout {
     display: flex;
-    flex-direction: row;
-    min-height: 100vh;
+    justify-content: space-between;
 }
 
 .main-content {

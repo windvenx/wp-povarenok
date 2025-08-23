@@ -19,6 +19,7 @@ $contacts = get_option('sportgear_contacts', []);
     <?php wp_head(); ?>
     <meta name="google-site-verification" content="653Uw5hF4Gz90FacOs9UaN3mkRmC4dKJNnIBkdQFaoM" />
     <style>
+        
         * {
             box-sizing: border-box;
             margin: 0;
@@ -35,16 +36,19 @@ $contacts = get_option('sportgear_contacts', []);
             --muted: #6b6b6b;
             --accent-start: #2fa336;
             --accent-end: #166b1b;
-            --container-width: 1300px;
+            --container-width: 1700px;
             --radius: 6px;
             --shadow: rgba(0,0,0,0.08);
         }
 
         /* Контейнер (центровка) — используется в header и nav */
         .container {
-            width: var(--container-width);
-            margin: 0 auto;
-        }
+  width: 100%;
+  max-width: 1450px !important;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
 
         /* ==========================
            TOP UTILITY

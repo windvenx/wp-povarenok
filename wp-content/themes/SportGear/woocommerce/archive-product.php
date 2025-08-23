@@ -145,33 +145,58 @@ if ($query->have_posts()) {
 
 
     <main class="flex-auto">
-        <div class="container">
-            <?php
-            if (function_exists('woocommerce_breadcrumb')) {
-                woocommerce_breadcrumb();
+    <div class="container">
+        <?php
+        if (woocommerce_product_loop()) {
+            if (have_posts()) {
+                ?>
+                <div class="flex flex-wrap gap-3 justify-center">
+                    <?php while (have_posts()) : the_post(); ?>
+                        <div class="border rounded-lg p-2 shadow-md bg-white w-48 h-64 flex flex-col items-center">
+                            <div class="flex justify-center flex-grow">
+                                <?php
+                                /**
+                                 * woocommerce_before_shop_loop_item_title hook.
+                                 * @hooked woocommerce_show_product_loop_sale_flash - 10
+                                 * @hooked woocommerce_template_loop_product_thumbnail - 10
+                                 */
+                                do_action('woocommerce_before_shop_loop_item_title');
+                                ?>
+                            </div>
+                            <div class="text-center mt-1">
+                                <?php
+                                /**
+                                 * woocommerce_shop_loop_item_title hook.
+                                 * @hooked woocommerce_template_loop_product_title - 10
+                                 */
+                                do_action('woocommerce_shop_loop_item_title');
+                                ?>
+                                <div class="text-yellow-400 mt-1 text-xs">
+                                    <?php
+                                    $rating = wc_get_rating_html(get_the_ID());
+                                    if ($rating) {
+                                        echo $rating;
+                                    } else {
+                                        echo '<span class="text-gray-400 text-xs">No ratings</span>';
+                                    }
+                                    ?>
+                                </div>
+                                <p class="text-gray-600 mt-1 text-sm"><?php echo wc_get_product()->get_price_html(); ?></p>
+                                <?php if (wc_get_product()->is_in_stock()) : ?>
+                                    <a href="?add-to-cart=<?php the_ID(); ?>" class="mt-1 inline-block bg-green-600 text-white px-2 py-1 rounded text-xs hover:bg-green-700">Под заказ</a>
+                                <?php else : ?>
+                                    <span class="mt-1 inline-block text-red-600 text-xs">Нет в наличии</span>
+                                <?php endif; ?>
+                            </div>
+                        </div>
+                    <?php endwhile; ?>
+                </div>
+                <?php
             }
-            ?>
-            <h1 class="mt-2 font-bold text-2xl mb-4 "> <?php echo esc_html(woocommerce_page_title()) ?> </h1>
-
-            <?php
-            if (woocommerce_product_loop()) {
-                if (have_posts()) {
-                    global $wp_query;
-                    ?>
-                    <form method="get" action="" class="flex flex-col lg:flex-row gap-6 mt-[10px]">
-                        <?php render_product_filter(
-                            min_price: $min_price,
-                            prices: $prices, in_stock_count:
-                            $in_stock_count, out_of_stock_count: $out_of_stock_count,
-                            almost_out_count: $almost_out_count,rating_counts: $rating_counts,
-                            ratings: $ratings,query: $query,max_price: $max_price,stock_status: $stock_status
-                        ) ?>
-                    </form>
-                    <?php
-                }
-            } ?>
-        </div>
-    </main>
+        }
+        ?>
+    </div>
+</main>
 
 <?php
 
