@@ -32,13 +32,13 @@
       wp_nav_menu(array(
         'theme_location' => 'Footer',
         'container' => 'ul',
-        'menu_class' => 'flex flex-wrap gap-[20px] items-center mb-6 text-sm font-medium text-gray-400 sm:mb-0 footer-list',
+        'menu_class' => 'flex flex-wrap gap-[20px] items-center mb-6 text-sm font-medium text-white sm:mb-0 footer-list',
       ));
       ?>
     </div>
     <hr class="my-6 border-gray-200 sm:mx-auto dark:border-gray-700 lg:my-8" />
-    <span class="block text-sm text-gray-400 sm:text-center">
-      © 2023 <a href="<?php echo esc_url(home_url()) ?>" class="hover:underline">SPORTGEAR</a>. Все права защищены.
+    <span class="block text-sm text-white sm:text-center">
+      © 2025 <a href="<?php echo esc_url(home_url()) ?>" class="hover:underline">POVARENOK</a>. Все права защищены.
     </span>
   </div>
 </footer>

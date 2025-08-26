@@ -1,6 +1,7 @@
 <?php
-$template_name = "home";
+/* Template Name: home-exact-copy */
 ?>
+
 <!DOCTYPE html>
 <html lang="ru">
 

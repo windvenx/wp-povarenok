@@ -620,8 +620,7 @@ main.main-content {
     font-size: 13px;
 }
 
-.card+.card {
-}
+
 
 /* responsive */
 @media (max-width:1200px) {
