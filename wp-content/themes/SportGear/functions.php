@@ -211,7 +211,316 @@ function send_cart_to_telegram(WP_REST_Request $request) {
     }
 }
 
+// Customizer: регистрируем настройки для цветовой схемы (live preview)
+add_action('customize_register', function($wp_customize) {
 
+    // Section
+    $wp_customize->add_section('home_colors_section', [
+        'title' => 'Цвета — Главная (Home)',
+        'priority' => 30,
+        'description' => 'Настройки цветовой схемы для главной страницы (live preview).'
+    ]);
+
+    // helper: регистрация setting + control для цвета (postMessage)
+    $add_color = function($id, $label, $default) use ($wp_customize) {
+        $wp_customize->add_setting($id, [
+            'default' => $default,
+            'transport' => 'postMessage', // живой превью
+            'sanitize_callback' => 'sanitize_hex_color'
+        ]);
+        $wp_customize->add_control(new WP_Customize_Color_Control($wp_customize, $id, [
+            'label' => $label,
+            'section' => 'home_colors_section'
+        ]));
+    };
+
+    $add_color('home_color_border', 'Цвет границ (--border)', '#e8e8e8');
+    $add_color('home_color_green', 'Акцентный цвет (--green)', '#16a34a');
+    $add_color('home_color_card_bg', 'Фон карточки (--card-bg)', '#ffffff');
+    $add_color('home_hero_start', 'Hero — цвет начала градиента', '#000000');
+    $add_color('home_hero_end', 'Hero — цвет конца градиента', '#000000');
+    $add_color('home_promo_overlay', 'Промо — цвет оверлея', '#000000');
+    $add_color('home_btn_bg', 'Кнопка — фон', '#16a34a');
+    $add_color('home_btn_text', 'Кнопка — текст', '#ffffff');
+
+    // прозрачности — простые текстовые поля (0..1). Можно заменить на number control.
+    $wp_customize->add_setting('home_hero_alpha', [
+        'default' => '0.15',
+        'transport' => 'postMessage',
+        'sanitize_callback' => 'wp_kses_post'
+    ]);
+    $wp_customize->add_control('home_hero_alpha', [
+        'label' => 'Hero — прозрачность градиента (0 - 1)',
+        'section' => 'home_colors_section',
+        'type' => 'text'
+    ]);
+
+    $wp_customize->add_setting('home_promo_alpha', [
+        'default' => '0.55',
+        'transport' => 'postMessage',
+        'sanitize_callback' => 'wp_kses_post'
+    ]);
+    $wp_customize->add_control('home_promo_alpha', [
+        'label' => 'Промо — прозрачность оверлея (0 - 1)',
+        'section' => 'home_colors_section',
+        'type' => 'text'
+    ]);
+
+});
+
+// Enqueue customize preview script (использует wp.customize API)
+add_action('customize_preview_init', function() {
+    wp_enqueue_script(
+        'theme-customize-preview',
+        get_template_directory_uri() . '/assets/js/customize-preview.js',
+        ['jquery', 'customize-preview'],
+        null,
+        true
+    );
+});
+
+// === Метабокс: Цветовая схема для главной страницы ===
+add_action('add_meta_boxes', function() {
+    add_meta_box('home_colors_mb', 'Цветовая схема (Home)', 'render_home_colors_meta', 'page', 'side', 'default');
+});
+
+function render_home_colors_meta($post) {
+    wp_nonce_field('home_meta_nonce', 'home_meta_nonce_field');
+
+    // поля + значения по умолчанию
+    $defaults = [
+        '_home_color_border' => '#e8e8e8',
+        '_home_color_green'  => '#16a34a',
+        '_home_color_card_bg'=> '#ffffff',
+        '_home_hero_start'   => '#000000',
+        '_home_hero_end'     => '#000000',
+        '_home_hero_alpha'   => '0.15', // прозрачность градиента
+        '_home_promo_overlay'=> '#000000',
+        '_home_promo_alpha'  => '0.55',
+        '_home_btn_bg'       => '#16a34a',
+        '_home_btn_text'     => '#ffffff',
+    ];
+    foreach ($defaults as $key => $def) {
+        ${$key} = get_post_meta($post->ID, $key, true) ?: $def;
+    }
+
+    // вывод полей
+    echo '<p><label>Цвет границ (--border)</label><br>';
+    echo '<input type="color" name="_home_color_border" value="'.esc_attr($_home_color_border).'" style="width:100%"></p>';
+
+    echo '<p><label>Акцентный цвет (--green)</label><br>';
+    echo '<input type="color" name="_home_color_green" value="'.esc_attr($_home_color_green).'" style="width:100%"></p>';
+
+    echo '<p><label>Фон карточки (--card-bg)</label><br>';
+    echo '<input type="color" name="_home_color_card_bg" value="'.esc_attr($_home_color_card_bg).'" style="width:100%"></p>';
+
+    echo '<hr><h4>Hero (градиент)</h4>';
+    echo '<p><label>Цвет начала градиента</label><br>';
+    echo '<input type="color" name="_home_hero_start" value="'.esc_attr($_home_hero_start).'" style="width:100%"></p>';
+
+    echo '<p><label>Цвет конца градиента</label><br>';
+    echo '<input type="color" name="_home_hero_end" value="'.esc_attr($_home_hero_end).'" style="width:100%"></p>';
+
+    echo '<p><label>Прозрачность градиента (0 - 1)</label><br>';
+    echo '<input type="text" name="_home_hero_alpha" value="'.esc_attr($_home_hero_alpha).'" style="width:100%" placeholder="0.15"></p>';
+
+    echo '<hr><h4>Промо-оверлей</h4>';
+    echo '<p><label>Цвет оверлея</label><br>';
+    echo '<input type="color" name="_home_promo_overlay" value="'.esc_attr($_home_promo_overlay).'" style="width:100%"></p>';
+
+    echo '<p><label>Прозрачность оверлея (0 - 1)</label><br>';
+    echo '<input type="text" name="_home_promo_alpha" value="'.esc_attr($_home_promo_alpha).'" style="width:100%" placeholder="0.55"></p>';
+
+    echo '<hr><h4>Кнопки</h4>';
+    echo '<p><label>Фон кнопки</label><br>';
+    echo '<input type="color" name="_home_btn_bg" value="'.esc_attr($_home_btn_bg).'" style="width:100%"></p>';
+
+    echo '<p><label>Цвет текста кнопки</label><br>';
+    echo '<input type="color" name="_home_btn_text" value="'.esc_attr($_home_btn_text).'" style="width:100%"></p>';
+}
+
+// helper: сохранить
+add_action('save_post', 'save_home_colors_meta');
+function save_home_colors_meta($post_id) {
+    if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) return;
+    if (!isset($_POST['home_meta_nonce_field']) || !wp_verify_nonce($_POST['home_meta_nonce_field'], 'home_meta_nonce')) return;
+    if (!current_user_can('edit_post', $post_id)) return;
+
+    $keys = [
+        '_home_color_border',
+        '_home_color_green',
+        '_home_color_card_bg',
+        '_home_hero_start',
+        '_home_hero_end',
+        '_home_hero_alpha',
+        '_home_promo_overlay',
+        '_home_promo_alpha',
+        '_home_btn_bg',
+        '_home_btn_text'
+    ];
+    foreach ($keys as $k) {
+        if (isset($_POST[$k])) {
+            update_post_meta($post_id, $k, sanitize_text_field($_POST[$k]));
+        }
+    }
+}
+
+
+// === Добавить в functions.php ===
+
+// Поддержки темы + меню
+add_action('after_setup_theme', function() {
+    add_theme_support('post-thumbnails');
+    add_theme_support('title-tag');
+    register_nav_menus([
+        'primary' => 'Главное меню',
+        'footer'  => 'Футер'
+    ]);
+});
+
+// Подключение Tailwind CDN и шрифтов Google (для быстрого прототипа)
+add_action('wp_enqueue_scripts', function() {
+    // Google Fonts
+    wp_enqueue_style('theme-google-fonts', 'https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Mulish:ital,wght@0,200..1000;1,200..1000&display=swap', [], null);
+    // Tailwind CDN (demo)
+    wp_enqueue_script('tailwind-cdn', 'https://cdn.tailwindcss.com', [], null, false);
+    // Твой основной фронт-скрипт (если надо) — не обязателен
+    // wp_enqueue_script('theme-main', get_template_directory_uri() . '/assets/js/main.js', [], null, true);
+});
+
+// === Metaboxes для главной страницы (слайды и промо) ===
+
+// Добавляем метабоксы
+add_action('add_meta_boxes', function() {
+    add_meta_box('home_slides_mb', 'Главный слайдер (3 слайда)', 'render_home_slides_meta', 'page', 'normal', 'high');
+    add_meta_box('home_promos_mb', 'Промо-блоки (3 блока)', 'render_home_promos_meta', 'page', 'normal', 'high');
+});
+
+// Рендер метабоксов
+function render_home_slides_meta($post) {
+    wp_nonce_field('home_meta_nonce', 'home_meta_nonce_field');
+
+    for ($i = 1; $i <= 3; $i++) {
+        $title = get_post_meta($post->ID, "home_slide_title_{$i}", true);
+        $subtitle = get_post_meta($post->ID, "home_slide_sub_{$i}", true);
+        $img_id = get_post_meta($post->ID, "home_slide_img_{$i}", true);
+        $img_url = $img_id ? wp_get_attachment_image_url($img_id, 'medium') : '';
+        echo "<h4>Слайд {$i}</h4>";
+        echo '<p><label>Заголовок</label><br>';
+        echo '<input style="width:100%" type="text" name="home_slide_title_' . $i . '" value="' . esc_attr($title) . '"></p>';
+        echo '<p><label>Подзаголовок</label><br>';
+        echo '<textarea style="width:100%" name="home_slide_sub_' . $i . '">' . esc_textarea($subtitle) . '</textarea></p>';
+        echo '<p><label>Изображение (ID или выбрать)</label><br>';
+        echo '<input style="width:70%;display:inline-block;margin-right:6px" type="text" id="home_slide_img_' . $i . '" name="home_slide_img_' . $i . '" value="' . esc_attr($img_id) . '">';
+        echo '<button class="button select-image" data-target="#home_slide_img_' . $i . '">Выбрать</button>';
+        if ($img_url) {
+            echo '<div style="margin-top:8px"><img src="' . esc_url($img_url) . '" style="max-width:200px;height:auto"></div>';
+        }
+        echo '<hr>';
+    }
+}
+
+function render_home_promos_meta($post) {
+    for ($i = 1; $i <= 3; $i++) {
+        $title = get_post_meta($post->ID, "home_promo_title_{$i}", true);
+        $category = get_post_meta($post->ID, "home_promo_cat_{$i}", true);
+        $img_id = get_post_meta($post->ID, "home_promo_img_{$i}", true);
+        $img_url = $img_id ? wp_get_attachment_image_url($img_id, 'medium') : '';
+        echo "<h4>Промо {$i}</h4>";
+        echo '<p><label>Категория (маленький текст)</label><br>';
+        echo '<input style="width:100%" type="text" name="home_promo_cat_' . $i . '" value="' . esc_attr($category) . '"></p>';
+        echo '<p><label>Заголовок</label><br>';
+        echo '<input style="width:100%" type="text" name="home_promo_title_' . $i . '" value="' . esc_attr($title) . '"></p>';
+        echo '<p><label>Изображение (ID или выбрать)</label><br>';
+        echo '<input style="width:70%;display:inline-block;margin-right:6px" type="text" id="home_promo_img_' . $i . '" name="home_promo_img_' . $i . '" value="' . esc_attr($img_id) . '">';
+        echo '<button class="button select-image" data-target="#home_promo_img_' . $i . '">Выбрать</button>';
+        if ($img_url) {
+            echo '<div style="margin-top:8px"><img src="' . esc_url($img_url) . '" style="max-width:200px;height:auto"></div>';
+        }
+        echo '<hr>';
+    }
+}
+
+// Сохранение
+add_action('save_post', function($post_id) {
+    if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) return;
+    if (!isset($_POST['home_meta_nonce_field']) || !wp_verify_nonce($_POST['home_meta_nonce_field'], 'home_meta_nonce')) return;
+    if (!current_user_can('edit_post', $post_id)) return;
+
+    // Slides
+    for ($i = 1; $i <= 3; $i++) {
+        if (isset($_POST["home_slide_title_{$i}"])) update_post_meta($post_id, "home_slide_title_{$i}", sanitize_text_field($_POST["home_slide_title_{$i}"]));
+        if (isset($_POST["home_slide_sub_{$i}"])) update_post_meta($post_id, "home_slide_sub_{$i}", sanitize_textarea_field($_POST["home_slide_sub_{$i}"]));
+        if (isset($_POST["home_slide_img_{$i}"])) update_post_meta($post_id, "home_slide_img_{$i}", intval($_POST["home_slide_img_{$i}"]));
+    }
+    // Promos
+    for ($i = 1; $i <= 3; $i++) {
+        if (isset($_POST["home_promo_title_{$i}"])) update_post_meta($post_id, "home_promo_title_{$i}", sanitize_text_field($_POST["home_promo_title_{$i}"]));
+        if (isset($_POST["home_promo_cat_{$i}"])) update_post_meta($post_id, "home_promo_cat_{$i}", sanitize_text_field($_POST["home_promo_cat_{$i}"]));
+        if (isset($_POST["home_promo_img_{$i}"])) update_post_meta($post_id, "home_promo_img_{$i}", intval($_POST["home_promo_img_{$i}"]));
+    }
+});
+
+// Admin JS: media uploader for image selection
+add_action('admin_enqueue_scripts', function($hook) {
+    // только на редакторе страницы
+    if ($hook !== 'post.php' && $hook !== 'post-new.php') return;
+    wp_enqueue_media();
+    wp_enqueue_script('home-admin-media', get_template_directory_uri() . '/assets/js/home-admin-media.js', ['jquery'], null, true);
+});
+
+
+add_action('after_setup_theme', function() {
+    // Check if pages have already been created
+    if (!get_option('sportgear_pages_created')) {
+        // Define pages to create
+        $pages = [
+            [
+                'post_title'   => 'Главная',
+                'post_content' => 'Редактируйте этот контент через стандартный редактор. Это главная страница вашего сайта.',
+                'post_status'  => 'publish',
+                'post_type'    => 'page',
+                'meta_input'   => [
+                    '_wp_page_template' => 'home-exact-copy.php', // Assign custom template
+                ],
+                'is_front_page' => true, // Mark as front page
+            ],
+            [
+                'post_title'   => 'О нас',
+                'post_content' => 'Это страница "О нас". Добавьте информацию о вашей компании через редактор WordPress.',
+                'post_status'  => 'publish',
+                'post_type'    => 'page',
+                'meta_input'   => [
+                    '_wp_page_template' => 'default', // Use default template or another custom one
+                ],
+            ],
+            [
+                'post_title'   => 'Каталог',
+                'post_content' => 'Это страница каталога. Добавьте описание или настройте отображение товаров.',
+                'post_status'  => 'publish',
+                'post_type'    => 'page',
+                'meta_input'   => [
+                    '_wp_page_template' => 'default',
+                ],
+            ],
+        ];
+
+        foreach ($pages as $page) {
+            $page_id = wp_insert_post($page);
+
+            if (!is_wp_error($page_id)) {
+                // Set as front page if specified
+                if (isset($page['is_front_page']) && $page['is_front_page']) {
+                    update_option('show_on_front', 'page');
+                    update_option('page_on_front', $page_id);
+                }
+            }
+        }
+
+        // Mark pages as created
+        update_option('sportgear_pages_created', 1);
+    }
+}, 20);
 
 
 
